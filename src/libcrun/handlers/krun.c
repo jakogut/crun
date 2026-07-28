@@ -22,6 +22,7 @@
 #include "../container.h"
 #include "../utils.h"
 #include "../linux.h"
+#include "krun-virtiofs-config.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -496,34 +497,12 @@ libkrun_exec (void *cookie, libcrun_container_t *container, const char *pathname
     }
   else
     {
-      json_object *val_virtiofs_tag = NULL;
-      json_object *val_virtiofs_shm_size = NULL;
-      const char *virtiofs_tag = NULL;
-      // Default to a conservative DAX size of 512MB, just like krun_set_root() does.
-      uint64_t virtiofs_shm_size = 512 * 1024 * 1024ULL;
-
-      if (kconf->config_tree != NULL)
-        {
-          val_virtiofs_tag = json_object_object_get (kconf->config_tree, "virtiofs_tag");
-          if (val_virtiofs_tag != NULL && json_object_is_type (val_virtiofs_tag, json_type_string))
-            virtiofs_tag = json_object_get_string (val_virtiofs_tag);
-
-          val_virtiofs_shm_size = json_object_object_get (kconf->config_tree, "virtiofs_shm_size");
-          if (val_virtiofs_shm_size != NULL && json_object_is_type (val_virtiofs_shm_size, json_type_int))
-            virtiofs_shm_size = json_object_get_uint64 (val_virtiofs_shm_size);
-        }
-
-      if (virtiofs_tag == NULL)
-        virtiofs_tag = "/dev/root";
-
       krun_add_virtiofs2 = dlsym (handle, "krun_add_virtiofs2");
-
-      if (krun_add_virtiofs2 == NULL)
-        error (EXIT_FAILURE, 0, "could not find symbol `krun_add_virtiofs2` in `libkrun.so`");
-
-      ret = krun_add_virtiofs2 (ctx_id, virtiofs_tag, "/", virtiofs_shm_size);
+      ret = krun_configure_virtiofs (
+          ctx_id, kconf->config_tree, find_annotation (container, "krun.virtiofs"),
+          krun_add_virtiofs2, &err);
       if (UNLIKELY (ret < 0))
-        error (EXIT_FAILURE, -ret, "could not add virtiofs root with tag `%s`", virtiofs_tag);
+        error (EXIT_FAILURE, crun_error_get_errno (&err), "%s", err->msg);
     }
 
   if (kconf->awsnitro)

@@ -53,6 +53,7 @@ libcrun_SOURCES = src/libcrun/utils.c \
 		src/libcrun/ebpf.c \
 		src/libcrun/error.c \
 		src/libcrun/handlers/handler-utils.c \
+		src/libcrun/handlers/krun-virtiofs-config.c \
 		src/libcrun/handlers/krun.c \
 		src/libcrun/handlers/mono.c \
 		src/libcrun/handlers/spin.c \
@@ -177,7 +178,7 @@ EXTRA_DIST = COPYING COPYING.libcrun README.md NEWS SECURITY.md rpm/crun.spec au
 	src/libcrun/cgroup-resources.h src/libcrun/cgroup-setup.h \
 	src/libcrun/cgroup-systemd.h src/libcrun/cgroup-utils.h \
 	src/libcrun/custom-handler.h src/libcrun/io_priority.h \
-	src/libcrun/handlers/handler-utils.h \
+	src/libcrun/handlers/handler-utils.h src/libcrun/handlers/krun-virtiofs-config.h \
 	src/libcrun/linux.h src/libcrun/utils.h src/libcrun/error.h src/libcrun/criu.h \
 	src/libcrun/scheduler.h src/libcrun/mempolicy.h src/libcrun/status.h src/libcrun/terminal.h \
 	src/libcrun/mount_flags.h src/libcrun/intelrdt.h src/libcrun/ring_buffer.h src/libcrun/string_map.h \
