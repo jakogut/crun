@@ -75,6 +75,13 @@ The following annotations are supported:
     **sev** (AMD SEV confidential workloads) and **aws-nitro** (AWS
     Nitro Enclaves).
 
+**krun.virtiofs**=*JSON*
+:   Add VirtioFS devices after the root device. The value is a JSON
+    array of objects containing a unique **tag** of at most 36 bytes,
+    an absolute host **path**, and a positive **shm_size** in bytes.
+    Devices from this annotation are appended after devices from the
+    VM configuration file.
+
 ## VM Configuration File
 
 A **.krun_vm.json** file can be placed at the root of the container
@@ -94,10 +101,20 @@ the following optional fields:
 - **virtiofs_tag** (string): VirtioFS tag (defaults to **/dev/root**).
 - **virtiofs_shm_size** (integer): VirtioFS DAX shared memory size in
   bytes (defaults to 512 MiB).
+- **virtiofs** (array): additional VirtioFS devices in the same format
+  as the **krun.virtiofs** annotation. These are added after the root
+  device and before annotation-provided devices.
 
 Example:
 
-    {"nested_virt": 1, "cpus": 4, "ram_mib": 2048}
+    {
+      "nested_virt": 1,
+      "cpus": 4,
+      "ram_mib": 2048,
+      "virtiofs": [
+        {"tag": "devshm", "path": "/dev/shm", "shm_size": 536870912}
+      ]
+    }
 
 # COMMANDS
 
