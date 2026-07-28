@@ -194,7 +194,7 @@ EXTRA_DIST += src/libcrun/blake3/blake3.c \
 endif
 
 if BUILD_TESTS
-UNIT_TESTS = tests/tests_libcrun_utils tests/tests_libcrun_ring_buffer tests/tests_libcrun_errors tests/tests_libcrun_intelrdt tests/tests_libcrun_terminal tests/tests_libcrun_custom_handler tests/tests_libcrun_linux tests/tests_libcrun_signals tests/tests_libcrun_mount_flags tests/tests_libcrun_chroot_realpath tests/tests_libcrun_seccomp_notify tests/tests_libcrun_cgroup
+UNIT_TESTS = tests/tests_libcrun_utils tests/tests_libcrun_ring_buffer tests/tests_libcrun_errors tests/tests_libcrun_intelrdt tests/tests_libcrun_terminal tests/tests_libcrun_custom_handler tests/tests_libcrun_krun_virtiofs tests/tests_libcrun_linux tests/tests_libcrun_signals tests/tests_libcrun_mount_flags tests/tests_libcrun_chroot_realpath tests/tests_libcrun_seccomp_notify tests/tests_libcrun_cgroup
 endif
 
 if ENABLE_CRUN
@@ -248,6 +248,11 @@ tests_tests_libcrun_custom_handler_CFLAGS = -I $(abs_top_builddir)/libocispec/sr
 tests_tests_libcrun_custom_handler_SOURCES = tests/tests_libcrun_custom_handler.c
 tests_tests_libcrun_custom_handler_LDADD = $(TESTS_LDADD)
 tests_tests_libcrun_custom_handler_LDFLAGS = $(crun_LDFLAGS)
+
+tests_tests_libcrun_krun_virtiofs_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocispec/src $(JSON_C_CFLAGS) -I $(abs_top_builddir)/src -I $(abs_top_srcdir)/src
+tests_tests_libcrun_krun_virtiofs_SOURCES = tests/tests_libcrun_krun_virtiofs.c
+tests_tests_libcrun_krun_virtiofs_LDADD = $(TESTS_LDADD)
+tests_tests_libcrun_krun_virtiofs_LDFLAGS = $(crun_LDFLAGS)
 
 tests_tests_libcrun_linux_CFLAGS = -I $(abs_top_builddir)/libocispec/src -I $(abs_top_srcdir)/libocispec/src $(JSON_C_CFLAGS) -I $(abs_top_builddir)/src -I $(abs_top_srcdir)/src
 tests_tests_libcrun_linux_SOURCES = tests/tests_libcrun_linux.c
